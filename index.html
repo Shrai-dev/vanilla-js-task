@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .content {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .container {
+      width: 100px;
+      height: 100px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #afec92;
+    }
+  </style>
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="content"></div>
+
+  <script>
+    const NUMBER_OF_ELEMENTS = 100;
+    const generatedElements = [];
+    const clickedElements = [];
+
+    const mainContainer = document.querySelector('.content');
+
+    const generateDivs = (num) => {
+      for (let i = 1; i <= num; i++) {
+        const div = document.createElement('div');
+        div.classList.add('container');
+        div.setAttribute('id', i);
+        div.innerText = `div${i}`;
+        mainContainer.appendChild(div);
+      }
+      handleClick();
+    };
+
+    const handleClick = () => {
+      const generatedElements = Array.from(document.querySelectorAll('.container'));
+
+      generatedElements.forEach((elem) => {
+        elem.addEventListener('click', (e) => {
+          const clickedTargetElement = e.target;
+          const elementId = generatedElements.findIndex(
+            (elem) => elem.id === clickedTargetElement.id
+          );
+
+          if (clickedElements.includes(clickedTargetElement)) {
+            clickedElements.splice(elementId, 1);
+            const clickedElem = generatedElements.splice(elementId, 1);
+            generatedElements.splice(+clickedTargetElement.id - 1, 0, clickedElem[0]);
+
+            updateLayout(generatedElements);
+          } else {
+            const clickedElem = generatedElements.splice(elementId, 1);
+            clickedElements.push(clickedTargetElement);
+            generatedElements.unshift(clickedElem[0]);
+            updateLayout(generatedElements);
+          }
+        });
+      });
+    };
+
+    const updateLayout = (array) => {
+      mainContainer.innerHTML = '';
+      array.forEach((elem) => mainContainer.appendChild(elem));
+    };
+
+    document.addEventListener('DOMContentLoaded', generateDivs(NUMBER_OF_ELEMENTS));
+
+  </script>
+</body>
+
+</html>
