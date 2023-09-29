@@ -59,14 +59,24 @@
       generatedElements.forEach((elem) => {
         elem.addEventListener('click', (e) => {
           const clickedTargetElement = e.target;
+          const clickedTargetElementId = e.target.id;
           const elementId = generatedElements.findIndex(
             (elem) => elem.id === clickedTargetElement.id
           );
 
           if (clickedElements.includes(clickedTargetElement)) {
-            clickedElements.splice(elementId, 1);
+            clickedElements.splice(
+              clickedElements.findIndex(
+                (elem) => elem.id === clickedTargetElementId
+              ),
+              1
+            );
             const clickedElem = generatedElements.splice(elementId, 1);
-            generatedElements.splice(+clickedTargetElement.id - 1, 0, clickedElem[0]);
+            generatedElements.splice(
+              clickedTargetElementId - 1,
+              0,
+              clickedElem[0]
+            );
 
             updateLayout(generatedElements);
           } else {
